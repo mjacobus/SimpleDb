@@ -74,7 +74,7 @@ array(
 */
 ```
 
-Quando o registro não é encontrado uma exception deve é lançada.
+Quando o registro não é encontrado uma exception deve ser lançada.
 
 ### Atualizando registros
 
@@ -86,7 +86,7 @@ $postDatabase->update($id, array(
 ));
 ```
 
-Quando o registro não é encontrado uma exception deve é lançada.
+Quando o registro não é encontrado uma exception deve ser lançada.
 
 ### Excluindo Registros
 
