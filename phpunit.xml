@@ -13,10 +13,9 @@
         </whitelist>
     </filter>
 
-    <logging>
-        <log type="coverage-clover" target="./build/logs/clover.xml"/>
-        <log type="coverage-html" target="./build/coverage" charset="UTF-8"
-             yui="true" highlight="true" lowUpperBound="50" highLowerBound="80"/>
-        <log type="testdox-html" target="./build/logs/testdox.html"/>
-    </logging>
+    <!-- <logging> -->
+    <!--     <log type="coverage&#45;html" target="./build/coverage" charset="UTF&#45;8" -->
+    <!--          yui="true" highlight="true" lowUpperBound="50" highLowerBound="80"/> -->
+    <!--     <log type="testdox&#45;html" target="./build/logs/testdox.html"/> -->
+    <!-- </logging> -->
 </phpunit>
