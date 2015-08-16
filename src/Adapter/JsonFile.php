@@ -2,7 +2,7 @@
 
 namespace Koine\SimpleDb\Adapter;
 
-class JsonFile
+class JsonFile implements AdapterInterface
 {
     /** @var string */
     private $file;
@@ -17,6 +17,7 @@ class JsonFile
 
     /**
      * {@inheritdoc}
+     *
      * @throws \RuntimeException
      */
     public function read()
@@ -38,5 +39,21 @@ class JsonFile
         }
 
         return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws RuntimeException
+     */
+    public function write(array $data)
+    {
+        $result = @file_put_contents($this->file, json_encode($data));
+
+        if ($result === false) {
+            throw new \RuntimeException(
+                sprintf('File "%s" could not be written', $this->file)
+            );
+        }
     }
 }

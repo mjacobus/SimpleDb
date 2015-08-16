@@ -19,6 +19,14 @@ class JsonFileTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function implementsAdapterInterface()
+    {
+        $this->assertInstanceOf('Koine\SimpleDb\Adapter\AdapterInterface', $this->adapter);
+    }
+
+    /**
+     * @test
+     */
     public function canReadDataFromJsonFile()
     {
         $content = '{"foo":"bar"}';
@@ -50,5 +58,31 @@ class JsonFileTest extends PHPUnit_Framework_TestCase
     {
         file_put_contents('/tmp/posts.json', 'invalid json');
         $this->adapter->read();
+    }
+
+    /**
+     * @test
+     */
+    public function canSaveDataToJsonFile()
+    {
+        $data = array('foo' => 'bar');
+        $this->adapter->write($data);
+
+        $expected = '{"foo":"bar"}';
+
+        $actual = file_get_contents('/tmp/posts.json');
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage File "/posts.json" could not be written
+     */
+    public function throwsExceptionWhenFileCannotBeSaved()
+    {
+        $this->adapter = new JsonFile('/posts.json');
+        $this->adapter->write(array());
     }
 }
