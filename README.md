@@ -4,6 +4,7 @@ Koine SimpleDb
 Este projeto é apenas um experimento com propósitos didáticos. Não deve ser usado em produção.
 
 [![Build Status](https://travis-ci.org/mjacobus/SimpleDb.svg?branch=master)](https://travis-ci.org/mjacobus/SimpleDb)
+[![Code Climate](https://codeclimate.com/github/mjacobus/SimpleDb/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/SimpleDb)
 
 ### Objetivo
 
