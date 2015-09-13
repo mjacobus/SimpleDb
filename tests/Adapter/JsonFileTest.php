@@ -40,6 +40,20 @@ class JsonFileTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function readReturnsEmptyArrayWhenFileIsEmpty()
+    {
+        @unlink('/tmp/posts.json');
+        exec('touch /tmp/posts.json');
+
+        $this->adapter = new JsonFile('/tmp/posts.json');
+        $data = $this->adapter->read();
+
+        $this->assertEquals(array(), $data);
+    }
+
+    /**
+     * @test
      * @expectedException \RuntimeException
      * @expectedExceptionMessage File "/tmp/posts.json" could not be read
      */
