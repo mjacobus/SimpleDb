@@ -19,7 +19,7 @@ class SimpleDbTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->adapter = $this->getMock(AdapterInterface::class);
+        $this->adapter = $this->getMock('Koine\SimpleDb\Adapter\AdapterInterface');
         $this->db = new SimpleDb($this->adapter);
     }
 
@@ -31,10 +31,10 @@ class SimpleDbTest extends PHPUnit_Framework_TestCase
         $this->adapter
             ->expects($this->once())
             ->method('read')
-            ->will($this->returnValue([]));
+            ->will($this->returnValue(array()));
 
         $data = $this->db->findAll();
-        $this->assertEquals([], $data);
+        $this->assertEquals(array(), $data);
     }
 
     /**
@@ -42,19 +42,19 @@ class SimpleDbTest extends PHPUnit_Framework_TestCase
      */
     public function findAllReturnsCollectionFromTheAdapter()
     {
-        $adapterData = [
-            'data' => [
-                ['foo' => 'bar'],
-            ],
-        ];
+        $adapterData = array(
+            'data' => array(
+                array('foo' => 'bar'),
+            ),
+        );
 
         $this->adapter->expects($this->once())
             ->method('read')
             ->willReturn($adapterData);
 
-        $expected = [
-            ['foo' => 'bar'],
-        ];
+        $expected = array(
+            array('foo' => 'bar'),
+        );
 
         $data = $this->db->findAll();
         $this->assertEquals($expected, $data);
