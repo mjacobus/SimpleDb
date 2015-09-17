@@ -31,6 +31,6 @@ class SimpleDb
             return $data['data'];
         }
 
-        return [];
+        return array();
     }
 }
