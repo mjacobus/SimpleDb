@@ -1,25 +1,12 @@
 Koine SimpleDb
 ---------------------
 
-Este projeto é apenas um experimento com propósitos didáticos. Não deve ser usado em produção.
+This project is only an experiment for studying purposes. It was presented at the [PHP Unconference](http://www.php-unconference.de/).
+
+[This](https://github.com/bootev/php_unconference/wiki/PhpUnconf-2015-Vortraege-Samstag) is the agenda for the first day.
 
 [![Build Status](https://travis-ci.org/mjacobus/SimpleDb.svg?branch=master)](https://travis-ci.org/mjacobus/SimpleDb)
 [![Code Climate](https://codeclimate.com/github/mjacobus/SimpleDb/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/SimpleDb)
-
-### Objetivo
-
-O objetivo deste projeto é ajudar desenvolvedores a entender o processo de desenvolvimento de software utilizando
-metodologias e práticas como:
-
-- TDD
-- Continuous Integration
-- Code Metrics:
-  - Code Coverage
-  - Code Climate
-- Composer:
-  - Criando e publicando a sua lib
-- SOLID
-- Colaboração com github
 
 ## Usage
 
@@ -32,14 +19,14 @@ O Adapter:
 
 $adapter =  new \Koine\SimpleDb\Adapter\JsonFile("/tmp/posts.json");
 
-// Salvando dados
+// Saving data
 $adapter->write(array('foo' => 'bar'));
 
-// Buscando dados
+// Reading data from file
 $data = $adapter->read();
 ```
 
-O banco de dados:
+The database:
 
 ```php
 <?php
@@ -47,7 +34,7 @@ O banco de dados:
 $postDatabase = new \Koine\SimpleDb\SimpleDb($adapter);
 ```
 
-### Criando Registros
+### Creating records
 
 ```php
 <?php
@@ -57,11 +44,11 @@ $post = array(
   'body'  => 'Hello everybody',
 );
 
-// Retorna o ID gerado
+// Return created id
 $id = $postDatabase->create($post);
 ```
 
-### Buscando registro por ID
+### Getting a record by its id
 
 ```php
 $postDatabase->find($id);
@@ -75,9 +62,9 @@ array(
 */
 ```
 
-Quando o registro não é encontrado uma exception deve ser lançada.
+When the record is not found it should throw an exception.
 
-### Atualizando registros
+### Updating records
 
 ```php
 <?php
@@ -87,9 +74,9 @@ $postDatabase->update($id, array(
 ));
 ```
 
-Quando o registro não é encontrado uma exception deve ser lançada.
+When the record is not found it should throw an exception
 
-### Excluindo Registros
+### Removing records
 
 ```php
 <?php
@@ -97,7 +84,7 @@ Quando o registro não é encontrado uma exception deve ser lançada.
 $postDatabase->delete($id);
 ```
 
-### Buscando todos os registros
+### Getting all records
 
 ```php
 <?php
@@ -106,7 +93,7 @@ $postDatabase->findAll();
 ```
 
 
-### Buscando registros por critérios
+### Finding all records based on a set of criterias
 
 ```php
 <?php

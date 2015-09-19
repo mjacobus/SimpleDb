@@ -2,62 +2,31 @@
 
 namespace Koine\SimpleDb\Adapter;
 
+/**
+ * AdapterKoine\SimpleDb\Adapter\JsonFile
+ */
 class JsonFile implements AdapterInterface
 {
     /** @var string */
     private $file;
 
-    /**
-     * @param string $file
-     */
     public function __construct($file)
     {
+        if (!file_exists($file)) {
+            throw new \InvalidArgumentException('File does not exist');
+        }
+
         $this->file = $file;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \RuntimeException
-     */
     public function read()
     {
-        $contents = @file_get_contents($this->file);
+        $contents = file_get_contents($this->file);
 
-        if ($contents === false) {
-            throw new \RuntimeException(
-                sprintf('File "%s" could not be read', $this->file)
-            );
-        }
-
-        if ($contents === '') {
-            return array();
-        }
-
-        $data = json_decode($contents, true);
-
-        if (!is_array($data)) {
-            throw new \RuntimeException(
-                sprintf('Contents of file "%s" is not a valid json', $this->file)
-            );
-        }
-
-        return $data;
+        return json_decode($contents, true);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws RuntimeException
-     */
     public function write(array $data)
     {
-        $result = @file_put_contents($this->file, json_encode($data));
-
-        if ($result === false) {
-            throw new \RuntimeException(
-                sprintf('File "%s" could not be written', $this->file)
-            );
-        }
     }
 }

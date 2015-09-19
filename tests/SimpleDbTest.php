@@ -2,9 +2,9 @@
 
 namespace KoineTest\SimpleDb;
 
-use Koine\SimpleDb\Adapter\AdapterInterface;
-use Koine\SimpleDb\SimpleDb;
 use PHPUnit_Framework_TestCase;
+use Koine\SimpleDb\SimpleDb;
+use Koine\SimpleDb\Adapter\AdapterInterface;
 
 /**
  * KoineTest\SimpleDb\SimpleDbTest
@@ -15,48 +15,68 @@ class SimpleDbTest extends PHPUnit_Framework_TestCase
     protected $db;
 
     /** @var AdapterInterface */
-    private $adapter;
+    protected $adapter;
 
     public function setUp()
     {
-        $this->adapter = $this->getMock('Koine\SimpleDb\Adapter\AdapterInterface');
+        $this->adapter = $this->getMock(AdapterInterface::class);
         $this->db = new SimpleDb($this->adapter);
     }
 
     /**
      * @test
      */
-    public function findAllReturnsEmptyWhenNoRecordsExist()
+    public function returnsEmptyArrayWhenNoRecordExists()
     {
-        $this->adapter
-            ->expects($this->once())
+        $this->adapter->expects($this->once())
             ->method('read')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
-        $data = $this->db->findAll();
-        $this->assertEquals(array(), $data);
+        $returnValue = $this->db->findAll();
+        $this->assertEquals([], $returnValue);
     }
 
     /**
      * @test
      */
-    public function findAllReturnsCollectionFromTheAdapter()
+    public function retunrsWhateverDataTheAdapterProvides()
     {
-        $adapterData = array(
-            'data' => array(
-                array('foo' => 'bar'),
+        $data = array('foo');
+
+        $this->adapter->expects($this->once())
+            ->method('read')
+            ->will($this->returnValue($data));
+
+        $returnValue = $this->db->findAll();
+        $this->assertEquals($data, $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function findAllCanFilterBasedOnInputCriterias()
+    {
+        $data = array(
+            array(
+                'foo' => 'bar',
+            ),
+            array(
+                'foo' => 'baz',
             ),
         );
 
         $this->adapter->expects($this->once())
             ->method('read')
-            ->willReturn($adapterData);
+            ->will($this->returnValue($data));
+
+        $returnValue = $this->db->findAll(array('foo' => 'bar'));
 
         $expected = array(
-            array('foo' => 'bar'),
+            array(
+                'foo' => 'bar',
+            )
         );
 
-        $data = $this->db->findAll();
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($expected, $returnValue);
     }
 }

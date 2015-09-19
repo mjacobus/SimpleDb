@@ -9,28 +9,30 @@ use Koine\SimpleDb\Adapter\AdapterInterface;
  */
 class SimpleDb
 {
-    /** @var AdapterInterface */
+    /** @var array */
     private $adapter;
-
-    /**
-     * @param AdapterInterface $adapter
-     */
     public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
-    /**
-     * @return array
-     */
-    public function findAll()
+    public function findAll(array $criterias = array())
     {
-        $data = $this->adapter->read();
+        $filteredData = array();
+        $rawData =  $this->adapter->read();
 
-        if (isset($data['data'])) {
-            return $data['data'];
+        if (!$criterias) {
+            return $rawData;
         }
 
-        return array();
+        foreach ($rawData as $record) {
+            foreach ($criterias as $field  => $value) {
+                if ($record[$field] == $value) {
+                    $filteredData[] = $record;
+                }
+            }
+        }
+
+        return $filteredData;
     }
 }

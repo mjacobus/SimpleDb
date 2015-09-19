@@ -2,18 +2,20 @@
 
 namespace KoineTest\SimpleDb\Adapter;
 
-use PHPUnit_Framework_TestCase;
+use Koine\SimpleDb\Adapter\AdapterInterface;
 use Koine\SimpleDb\Adapter\JsonFile;
+use PHPUnit_Framework_TestCase;
 
+/**
+ * @author Marcelo Jacobus <marcelo.jacobus@gmail.com>
+ */
 class JsonFileTest extends PHPUnit_Framework_TestCase
 {
-    /** @var JsonFile */
-    protected $adapter;
+    protected $object;
 
     public function setUp()
     {
-        @unlink('/tmp/posts.json');
-        $this->adapter = new JsonFile('/tmp/posts.json');
+        $this->object = new JsonFile('/tmp/data.json');
     }
 
     /**
@@ -21,82 +23,29 @@ class JsonFileTest extends PHPUnit_Framework_TestCase
      */
     public function implementsAdapterInterface()
     {
-        $this->assertInstanceOf('Koine\SimpleDb\Adapter\AdapterInterface', $this->adapter);
+        $this->assertInstanceOf(AdapterInterface::class, $this->object);
     }
 
     /**
      * @test
      */
-    public function canReadDataFromJsonFile()
+    public function canReadJsonData()
     {
-        $content = '{"foo":"bar"}';
-        file_put_contents('/tmp/posts.json', $content);
+        $jsonData = '{"foo":"bar"}';
+        file_put_contents('/tmp/data.json', $jsonData);
 
+
+        $data = $this->object->read();
         $expected = array('foo' => 'bar');
-        $result = $this->adapter->read();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, $data);
     }
 
     /**
      * @test
+     * @expectedException InvalidArgumentException
      */
-    public function readReturnsEmptyArrayWhenFileIsEmpty()
+    public function throwsAnExceptionWhenFileDoNotExist()
     {
-        @unlink('/tmp/posts.json');
-        exec('touch /tmp/posts.json');
-
-        $this->adapter = new JsonFile('/tmp/posts.json');
-        $data = $this->adapter->read();
-
-        $this->assertEquals(array(), $data);
-    }
-
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage File "/tmp/posts.json" could not be read
-     */
-    public function throwsAnExceptionWhenFileCannotBeRead()
-    {
-        @unlink('/tmp/json.json');
-        $this->adapter->read();
-    }
-
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Contents of file "/tmp/posts.json" is not a valid json
-     */
-    public function throwsAndExceptionWhenDataCannotBeConvertedToArray()
-    {
-        file_put_contents('/tmp/posts.json', 'invalid json');
-        $this->adapter->read();
-    }
-
-    /**
-     * @test
-     */
-    public function canSaveDataToJsonFile()
-    {
-        $data = array('foo' => 'bar');
-        $this->adapter->write($data);
-
-        $expected = '{"foo":"bar"}';
-
-        $actual = file_get_contents('/tmp/posts.json');
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @test
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage File "/posts.json" could not be written
-     */
-    public function throwsExceptionWhenFileCannotBeSaved()
-    {
-        $this->adapter = new JsonFile('/posts.json');
-        $this->adapter->write(array());
+        $this->object = new JsonFile('/tmp/nonexistingfile');
     }
 }
